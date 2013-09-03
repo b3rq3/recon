@@ -4,8 +4,8 @@
 # Author="bq"
 #
 # License:
-# free as in free beer.
-# For legal purposes only. User take full responsibility for any actions performed using this tool. 
+# Free as in free beer.
+# For legal purposes only. User take full responsibility for any actions performed using this script.
 # The author accepts no liablity for damage caused by this tool. 
 # 
 # credits to:
@@ -24,6 +24,13 @@
 
 #BULLSHIT =  2>/dev/null 
 
+usage () {
+	echo "-s | output to stdout"
+	echo "-o  /path/your.txt | will write the output to your.txt"
+
+}
+
+recon () {
 
 echo  '\n'
 echo  '|---------------------------------------------------------------|'
@@ -185,7 +192,21 @@ else
 	rpm -qa
 fi
 
-
-
-
 exit 0
+}
+
+
+case "$1" in
+	-o)
+		recon >$2
+		;;
+	-s)
+		recon
+		;;
+	*)
+		usage
+		exit 0
+		;;
+esac
+
+
