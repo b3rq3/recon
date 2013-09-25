@@ -10,6 +10,7 @@
 # 
 # credits to:
 # http://blog.g0tmi1k.com/2011/08/basic-linux-privilegescalation.html
+# http://www.tldp.org/HOWTO/Security-HOWTO/file-security.html
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # TODO:
@@ -22,7 +23,6 @@
 # echo os.system('/bin/bash')
 # /bin/sh -i
 
-#BULLSHIT =  2>/dev/null 
 
 usage () {
 	echo "-s | output to stdout"
@@ -54,15 +54,6 @@ echo  '\n'
 echo '::::::::::::::::::::::::: cat /etc/fstab :::::::::::::::::::::::::::::::::::::::: '
 cat /etc/fstab
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
-
-#redundant info -> installed packages
-#echo Development tools availability
-#which gcc
-#which g++
-#which python
-#which perl
-#which ruby
-#which lua
 
 
 echo  '\n\n'
@@ -103,7 +94,7 @@ echo ':::::::::::::::::::::::: /var/spool/cron* ::::::::::::::::::::::::::::::::
 find /var/spool/cron* -ls 2>/dev/null
 echo  '\n'
 echo ':::::::::::::::::::::::: crontab -l :::::::::::::::::::::::::::::::::::::::: '
-crontab -l
+crontab -l 2>/dev/null
 echo  '\n'
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
@@ -121,7 +112,14 @@ echo  '|---------------------------------------------------------------|'
 echo  '                   global suid and guid writable files'
 echo  '|---------------------------------------------------------------|'
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
-find / -o -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o=w -perm -g=s -ls 2>/dev/null
+#find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o=w -perm -g=s -ls 2>/dev/null
+
+## just in case you need more verbose information: 
+##  all suid/sgid files
+# find / -type f \( -perm -04000 -o -perm -02000 \) -ls 2>/dev/null
+
+## world writable files 
+# find / -perm -2 ! -type l -ls 2>/dev/null
 echo  '\n'
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
@@ -167,16 +165,16 @@ echo  '|---------------------------------------------------------------|'
 echo  '                    webfiles'
 echo  '|---------------------------------------------------------------|'
 echo ':::::::::::::::::::: /var/www ::::::::::::::::::::::::::::::::::::::::::::: '
-ls -alhR /var/www/*
+ls -alhR /var/www/* 2>/dev/null 
 echo  '\n'
 echo '::::::::::::::::::::: /srv/www/htdocs :::::::::::::::::::::::::::::::::::::::::::: '
-ls -alhR /srv/www/htdocs/
+ls -alhR /srv/www/htdocs/ 2>/dev/null
 echo  '\n'
 echo '::::::::::::::::::::: /usr/local/www/apache22/data  :::::::::::::::::::::::::::::::::::::::::::: '
-ls -alhR /usr/local/www/apache22/data/
+ls -alhR /usr/local/www/apache22/data/ 2>/dev/null
 echo  '\n'
 echo ':::::::::::::::::::::: /opt/lampp/htdocs ::::::::::::::::::::::::::::::::::::::::::: '
-ls -alhR /opt/lampp/htdocs/
+ls -alhR /opt/lampp/htdocs/ 2>/dev/null
 echo  '\n'
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
