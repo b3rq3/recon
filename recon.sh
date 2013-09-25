@@ -4,9 +4,9 @@
 # Author="bq"
 #
 # License:
-# Free as in free beer.
+# BEER-WARE http://en.wikipedia.org/wiki/Beerware 
 # For legal purposes only. User take full responsibility for any actions performed using this script.
-# The author accepts no liablity for damage caused by this tool. 
+# The author accepts no liablity for damage caused by this script. 
 # 
 # credits to:
 # http://blog.g0tmi1k.com/2011/08/basic-linux-privilegescalation.html
