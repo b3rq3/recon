@@ -112,7 +112,7 @@ echo  '|---------------------------------------------------------------|'
 echo  '                   global suid and guid writable files'
 echo  '|---------------------------------------------------------------|'
 echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
-#find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o=w -perm -g=s -ls 2>/dev/null
+find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o=w -perm -g=s -ls 2>/dev/null
 
 ## just in case you need more verbose information: 
 ##  all suid/sgid files
