@@ -4,7 +4,7 @@
 # Author="bq"
 #
 # License:
-# BEER-WARE http://en.wikipedia.org/wiki/Beerware 
+# MIT read the license file
 # For legal purposes only. User take full responsibility for any actions performed using this script.
 # The author accepts no liablity for damage caused by this script. 
 # 
