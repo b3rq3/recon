@@ -24,94 +24,71 @@
 # /bin/sh -i
 
 
-usage () {
+usage() {
 	echo "-s | output to stdout"
 	echo "-o  /path/your.txt | will write the output to your.txt"
 
 }
 
-recon () {
+infoprint() {
+	divider="|------------------------------------------------------------------|"
+	t="\n %40s \n"
+	printf "$divider"
+	printf "$t" "$1"
+	printf "$divider\n"
+}
 
-echo  '\n'
-echo  '|---------------------------------------------------------------|'
-echo  '               distribution and kernel version                   '
-echo  '|---------------------------------------------------------------|\n'
+commandinfo() {
+	t="%10s\n"
+	printf "$t" "::::::::::::::::::::::::::" "$1" "::::::::::::::::::::::::::"
+}
+
+# this works only in bash
+#divider() {
+#	printf -v d "%80s" "" 
+#	printf "%s\n" "${d// /_}"
+#}
+
+recon() {
+
+infoprint "Distribution and Kernel Info"
 cat /etc/issue
 uname -a 
 ls /boot/vmlinuz*
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    mount and diskusage '
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::: mount -l :::::::::::::::::::::::::::::::::::::: '
+infoprint "mount and diskusage"
+commandinfo "mount -l"
 mount -l 
-echo  '\n'
-echo ':::::::::::::::::::::::::: dh -h ::::::::::::::::::::::::::::::::::::::: '
+commandinfo "df -h"
 df -h 
-echo  '\n'
-echo '::::::::::::::::::::::::: cat /etc/fstab :::::::::::::::::::::::::::::::::::::::: '
+commandinfo "cat /etc/fstab"
 cat /etc/fstab
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    network '
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::: netstat -tulpen :::::::::::::::::::::::::::::::::::::::::: '
+infoprint "network"
+commandinfo "netstat -tulpen"
 netstat -tulpen
-echo  '\n'
-echo '::::::::::::::::::::::: ip a :::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "ip a"
 ip a
-echo  '\n'
-echo ':::::::::::::::::::::::: ip route show ::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "ip route show"
 ip route show
-echo  '\n'
-echo ':::::::::::::::::::::::: cat /etc/hosts ::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "cat /etc/hosts"
 cat /etc/hosts
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    ps aux '
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "processes"
 ps aux
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    scheduled jobs '
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::: /etc/cron* :::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "scheduled jobs"
+commandinfo "find /etc/cron*"
 find /etc/cron* -ls 2>/dev/null
-echo  '\n'
-echo ':::::::::::::::::::::::: /var/spool/cron* ::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "/var/spool/cron*"
 find /var/spool/cron* -ls 2>/dev/null
-echo  '\n'
-echo ':::::::::::::::::::::::: crontab -l :::::::::::::::::::::::::::::::::::::::: '
+commandinfo "crontab -l"
 crontab -l 2>/dev/null
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    readable files in /etc '
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "readable files in /etc"
 find /etc -user `id -u` -perm -u=r -o -group `id -g` -perm -g=r -o -perm -o=r -ls 2>/dev/null
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                   global suid and guid writable files'
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "global suid and guid writable files"
 find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o=w -perm -g=s -ls 2>/dev/null
 
 ## just in case you need more verbose information: 
@@ -120,75 +97,46 @@ find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o
 
 ## world writable files 
 # find / -perm -2 ! -type l -ls 2>/dev/null
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
 #dangerous ~~~> disk can be noisy.
 #echo Writable files outside HOME
 #mount -l find / -path “$HOME” -prune -o -path “/proc” -prune -o \( ! -type l \) \( -user `id -u` -perm -u=w  -o -group `id -g` -perm -g=w  -o -perm -o=w \) -ls 2>/dev/null
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    printers'
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "printers"
 lpstat -a
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '|---------------------------------------------------------------|'
-echo  '                    users and groups'
-echo  '|---------------------------------------------------------------|'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
-echo  '\n'
-echo  '\n\n'
-echo ':::::::::::::::::: id u g::::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "users and groups"
+commandinfo "id u g"
 id -u 
 id -g
-echo  '\n'
-echo ':::::::::::::::::::: last ::::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "last"
 last
-echo  '\n'
-echo '::::::::::::::::::::: w  :::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "w"
 w
-echo  '\n'
-echo '::::::::::::::::::::: /etc/group :::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "/etc/group"
 cat /etc/group
-echo  '\n'
-echo ':::::::::::::::::::::: /etc/passwd ::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "/etc/group"
 cat /etc/passwd
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
 
-echo  '\n\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    webfiles'
-echo  '|---------------------------------------------------------------|'
-echo ':::::::::::::::::::: /var/www ::::::::::::::::::::::::::::::::::::::::::::: '
+infoprint "webfiles"
+commandinfo "ls -alhR /var/www"
 ls -alhR /var/www/* 2>/dev/null 
-echo  '\n'
-echo '::::::::::::::::::::: /srv/www/htdocs :::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "ls -alhR /srv/www/htdocs"
 ls -alhR /srv/www/htdocs/ 2>/dev/null
-echo  '\n'
-echo '::::::::::::::::::::: /usr/local/www/apache22/data  :::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "ls -alhR /usr/local/www/apache22/data"
 ls -alhR /usr/local/www/apache22/data/ 2>/dev/null
-echo  '\n'
-echo ':::::::::::::::::::::: /opt/lampp/htdocs ::::::::::::::::::::::::::::::::::::::::::: '
-ls -alhR /opt/lampp/htdocs/ 2>/dev/null
-echo  '\n'
-echo '::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: '
+commandinfo "ls -alhR /opt/lampp/htdocs"
 
-echo  '\n'
-echo  '|---------------------------------------------------------------|'
-echo  '                    installed packages '
-echo  '|---------------------------------------------------------------|'
 
+infoprint "installed packages"
 if [  /usr/bin/dpkg ]; then
 
 	dpkg -l | awk '{print $2 " "  $3}'
 else
 	rpm -qa
 fi
+
+commandinfo "end of recon"
 
 exit 0
 }
