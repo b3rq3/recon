@@ -51,7 +51,7 @@ commandinfo() {
 
 recon() {
 
-infoprint "Distribution and Kernel Info"
+infoprint "distribution and kernel info"
 cat /etc/issue
 uname -a 
 ls /boot/vmlinuz*
