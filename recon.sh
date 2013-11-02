@@ -98,7 +98,7 @@ find / -group `id -g` -perm -g=w -perm -u=s -o -perm -o=w -perm -u=s -o -perm -o
 ## world writable files 
 # find / -perm -2 ! -type l -ls 2>/dev/null
 
-#dangerous ~~~> disk can be noisy.
+#dangerous ~~~> noisy
 #echo Writable files outside HOME
 #mount -l find / -path “$HOME” -prune -o -path “/proc” -prune -o \( ! -type l \) \( -user `id -u` -perm -u=w  -o -group `id -g` -perm -g=w  -o -perm -o=w \) -ls 2>/dev/null
 
