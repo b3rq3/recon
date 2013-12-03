@@ -18,7 +18,7 @@
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# maybe you need a real shell 
+# in case you need a real shell 
 # python -c 'import pty;pty.spawn("/bin/bash")'
 # echo os.system('/bin/bash')
 # /bin/sh -i
