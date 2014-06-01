@@ -62,6 +62,8 @@ mount -l
 commandinfo "df -h"
 df -h 
 commandinfo "cat /etc/fstab"
+# trick 17 if cat is disabled - wtf
+# FSTAB=$(< /etc/fstab)
 cat /etc/fstab
 
 infoprint "network"
